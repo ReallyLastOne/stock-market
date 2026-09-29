@@ -1,0 +1,64 @@
+plugins {
+    alias(libs.plugins.java)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.graalvm.buildtools.native)
+    id 'maven-publish'
+}
+
+group = 'org.reallylastone'
+version = file('version.txt').text.trim()
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+dependencies {
+    implementation libs.common
+    implementation libs.spring.boot.starter.actuator
+    implementation libs.spring.boot.starter.data.jpa
+    implementation libs.postgresql
+    implementation libs.mapstruct
+    implementation libs.springdoc.openapi.starter.webmvc.ui
+    compileOnly libs.lombok
+    developmentOnly libs.spring.boot.devtools
+    annotationProcessor libs.lombok
+    annotationProcessor libs.lombok.mapstruct.binding
+    annotationProcessor libs.mapstruct.processor
+    testImplementation 'org.springframework.boot:spring-boot-test'
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.mockito:mockito-junit-jupiter'
+    testCompileOnly libs.lombok
+    testRuntimeOnly libs.junit.platform.launcher
+    testAnnotationProcessor libs.lombok
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+springBoot {
+    buildInfo()
+}
+
+tasks.withType(GenerateModuleMetadata).configureEach {
+    enabled = false
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}

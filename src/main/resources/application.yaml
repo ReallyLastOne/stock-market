@@ -1,0 +1,32 @@
+server:
+  port: 9082
+spring:
+  application:
+    name: stock-market
+  datasource:
+    url: 'jdbc:postgresql://${STOCK_MARKET_DB_HOST:localhost}:${STOCK_MARKET_DB_PORT:5432}/platform?currentSchema=stock_market'
+    username: ${STOCK_MARKET_DB_USER:stock_market}
+    password: ${STOCK_MARKET_DB_PASS:stock_market}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: stock_market
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: '${STOCK_MARKET_KEYCLOAK_HOST:http://localhost:8180}/realms/platform'
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+common.authorization.use-auth-view: true
+app.module: stock-market
