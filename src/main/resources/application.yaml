@@ -19,6 +19,13 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: '${STOCK_MARKET_KEYCLOAK_HOST:http://localhost:8180}/realms/platform'
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: 5672
+    username: ${STOCK_MARKET_RABBITMQ_USER:stock_market}
+    password: ${STOCK_MARKET_RABBITMQ_PASSWORD:stock_market}
+    virtual-host: /platform
+
 management:
   endpoints:
     web:
